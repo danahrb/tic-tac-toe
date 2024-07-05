@@ -12,7 +12,7 @@ const winningCombos = [
 ];
 
 /*---------------------------- Variables (state) ----------------------------*/
-let board = ['X','X','X','O','X','O','O','X','O']
+let board = ['','','','','','','','','']
 let turn = 'X'
 let winner = false
 let tie = false
@@ -30,7 +30,6 @@ const test= () => {
 
 const init =() =>
 {
-
 render ();
 }
 
@@ -43,42 +42,44 @@ const render= ()=>{
 
 
 const updateBoard = ()=> {
-  board.forEach((element,index) =>{
-      if (element === "X"){
-          squareEls[index].innerText = "X";
-      }
-      else if (element === "O"){
-          squareEls[index].innerText = "O";
-      }
-     else {
-          squareEls[index].innerText = "";
-      }
-  })
-}
+  board.forEach((element,i) =>{
+      squareEls[i].innerText=board[i];
+})}
 
   const updateMessage=() => {
     if (!winner && !tie) {
       messageEl.textContent = `Player ${turn}'s turn`;
       } else if (!winner && tie) {
         messageEl.textContent = "It's a tie!";
-      } 
-    }
-
-    function placePiece(index) {
-      board[index] = turn;
-      console.log(board);
-    }
-    
-
-
-    
-    function handleSquareClick(index) {
-      if (board[index] === '' && !winner && !tie) {
-        placePiece(index);
-        checkForWinner();
-        switchPlayer();
+      } else 
+      {
+        messageEl.textContent= `The winner is ${winner}`
       }
     }
+
+    function placePiece(i) {
+    board[i] = turn;
+    console.log(board);
+    }
+    
+    function handleSquareClick(i) {
+      let index= i;
+      if (board[index] ==='X'|| board[index]==='O'|| winner){
+        return  }
+        else
+      placePiece(i);
+      checkForWinner();
+          }
+    
+
+function checkForWinner(){
+  winningCombos.forEach(combo => {
+    if (board[combo[0]]!==''&& board[combo[0]]===board[combo[1]]&& board[combo[0]]===board[combo[2]])
+winner=true
+    }    )
+}
+
+
     function checkForTie() {
   if (winner) {
     return;
@@ -109,10 +110,9 @@ function switchPlayerTurn() {
 /*----------------------------- Event Listeners -----------------------------*/
 
 
-//squareEls.addEventListener('click',test)
 
 squareEls.forEach(square => {
-   square.addEventListener('click', test);
+   square.addEventListener('click', handleSquareClick(index));
  }); 
 
 render();
